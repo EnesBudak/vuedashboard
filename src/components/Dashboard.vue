@@ -22,8 +22,9 @@
             <div class="card-header ">
               <div class="row">
                 <div class="col-sm-6 text-left">
+      
+                  <h2 class="card-title text-right">İş Zekası ve Karar Destek</h2>
                   <h5 class="card-category">Toplam Siparişler</h5>
-                  <h2 class="card-title">İstatistik</h2>
                 </div>
                
               </div>
@@ -31,8 +32,9 @@
             <div class="card-body">
               <div class="chart-area">
                 <!-- <canvas id="chartBig1"></canvas> -->
-               
-               <h1 class="card-title text-center " >Çok Yakında</h1>
+                 <Chart v-if="loaded" style="height:100%" :chartdata='chartdata2' :options='options' />
+                
+             
                
               </div>
             </div>
@@ -53,7 +55,7 @@
                   <div style="float:right">
                     <p class="cart-category">Aylık Sipariş Tutarı </p>
                     <h3 class="card-title">
-                      {{aylikToplamSatis}}
+                      {{aylikToplamSatis}} TL
                     </h3>
                   </div>
                 </div>
@@ -136,7 +138,7 @@
                   <div style="float:right">
                     <p class="cart-category">Kayıtlı Kullanıcı Sayısı </p>
                     <h3 class="card-title">
-                     50
+                     {{userCount.count}}
 
                     </h3>
                   </div>
@@ -161,7 +163,7 @@
             </div>
             <div class="card-body">
               <div class="chart-area">
-               <AylikChart v-if="aylikLoaded"   style="height: 100%" :chartdata='chartdataAylik' :options='Aylikoptions' />
+               <AylikChart v-if="aylikLoaded"   style="height:100%" :chartdata='chartdata1' :options='Aylikoptions' />
               </div>
             </div>
           </div>
@@ -175,7 +177,7 @@
             <div class="card-body">
               <div class="chart-area">
                 <!-- <canvas id="CountryChart"></canvas> -->
-                <AylikChart v-if="aylikLoaded"  style="height: 100%" :chartdata='chartdataAylik' :options='Aylikoptions' />
+                <AylikChart v-if="aylikLoaded"  style="height:100%" :chartdata='chartdataAylik' :options='Aylikoptions' />
               </div>
             </div>
           </div>
@@ -186,11 +188,11 @@
               <h5 class="card-category">Günlük Tamamlanan Sipariş Sayısı</h5>
               <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>{{günlükSiparisSayisi}} Adet</h3>
             </div>
-            
+         
             <div class="card-body">
               <div class="chart-area">
                  
-                  <Chart v-if="loaded" style="height: 100%" :chartdata='chartdata' :options='options' />
+                  <Chart v-if="loaded" style="height:100%" :chartdata='chartdata' :options='options' />
              
               </div>
             </div>
@@ -221,6 +223,8 @@
         loaded:false,
         aylikLoaded:false,
         chartdata:null,
+        chartdata1:null,
+        chartdata2:null,
         chartdataAylik:null,
         options:null,
         Aylikoptions:null,
@@ -235,6 +239,11 @@
         iptalSiparisData:0,
         günlükSiparisSayisi:0,
         aylikSiparisSayisi:0,
+        userCount:0,
+        kuryeToplamSiparis:0,
+        kuryeİsim:[],
+        kuryeSiparis:[],
+
         
 
       
@@ -245,6 +254,8 @@
     },
     computed: mapGetters(['allDatas']),
     methods: {
+
+      
     
    
     },
@@ -255,7 +266,21 @@
        
         
         
-     })
+     });
+     await axios.get('http://localhost:81/admin/api/allKurye')
+     .then((res) =>{
+        for( let i = 0 ; i < res.data.length ; i++){
+            this.kuryeİsim.push(res.data[i].firstname + ' '+ res.data[i].lastname)
+            
+        }
+        for( let i = 0 ; i < res.data.length ; i++){
+            this.kuryeSiparis.push(res.data[i].siparis)
+            
+        }
+       
+          console.log(this.kuryeSiparis);
+          
+     });
      await  axios.get('http://localhost:81/admin/api/thisdayorder')
         .then((response) => {
           console.log(response.data.status)
@@ -302,14 +327,75 @@
             
             }
             ]
-           }
+           };
+
+              this.chartdata2 = {
+
+        
+ 
+             
+             labels:['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran',],
+
+            datasets:[{
+               
+          backgroundColor: ['rgba(66,134,121,0.15)'],
+          borderColor: '#1f8ef1',
+          borderWidth: 2,
+          borderDash: [],
+          borderDashOffset: 0.0,
+          pointBackgroundColor: '#00d6b4',
+          pointBorderColor: 'rgba(255,255,255,0)',
+          pointHoverBackgroundColor: '#00d6b4',
+          pointBorderWidth: 10,
+          pointHoverRadius: 4,
+          pointHoverBorderWidth: 15,
+          pointRadius: 4,
+              
+            label:'Ödeme Tipleri',
+            data:[10,60,30,0,100,200],
+            
+            }
+            ]
+           };
+            this.chartdata1 = {
+
+        
+ 
+             
+             labels:this.kuryeİsim,
+
+            datasets:[{
+               
+          backgroundColor: ['rgba(66,134,121,0.15)'],
+          borderColor: '#1f8ef1',
+          borderWidth: 2,
+          borderDash: [],
+          borderDashOffset: 0.0,
+          pointBackgroundColor: '#00d6b4',
+          pointBorderColor: 'rgba(255,255,255,0)',
+          pointHoverBackgroundColor: '#00d6b4',
+          pointBorderWidth: 10,
+          pointHoverRadius: 4,
+          pointHoverBorderWidth: 15,
+          pointRadius: 4,
+              
+            label:'Götürülen Sipariş Sayısı',
+            data:this.kuryeSiparis,
+            
+            }
+            ]
+           };
+
            this.options = {
-              legend: {
+                      maintainAspectRatio: false,
+        legend: {
           display: false
         },
-          responsive:true,
-       
+        responsive: true,
+         
 
+        
+          
               tooltips: {
           backgroundColor: '#f5f5f5',
           titleFontColor: '#333',
@@ -324,27 +410,34 @@
              
             scales: {
           yAxes: [{
-              
-
-
+             
             gridLines: {
               drawBorder: false,
               color: 'rgba(29,140,248,0.1)',
               zeroLineColor: "transparent",
             },
             ticks: {
-              suggestedMin: 0,
-              suggestedMax: 1,
-              padding:20,     
+              
+              suggestedMin:0,
+             suggestedMax:5,
+                 
               fontColor: "#9e9e9e"
             }
           }],
 
           xAxes: [{
+              
+              gridLines:{
+                drawBorder: false,
+              color: 'rgba(29,140,248,0.1)',
+              zeroLineColor: "transparent",
+              },
 
            
             ticks: {
-              padding:20,
+             
+                padding:20,
+             
               fontColor: "#9e9e9e"
             }
           }]
@@ -426,8 +519,8 @@
             },
             ticks: {
               
-              suggestedMin:20,
-             suggestedMax:125,
+              suggestedMin:0,
+             suggestedMax:5,
                  
               fontColor: "#9e9e9e"
             }
@@ -461,6 +554,21 @@
        
     },
     created() {
+
+        
+  const  url3 = 'http://localhost:81/admin/api/alluser'
+
+    axios.get(url3)
+    .then((response) => {
+      
+        this.userCount =(response.data);
+       
+        
+        
+        
+    })
+
+
      
 
     }

@@ -5,7 +5,7 @@
           <div class="col-md-6">
             <div class="card">
               <div class="card-header">
-                <h5 class="title">Kurye Ekle</h5>
+                <h5 class="title">Ürün Ekle</h5>
               </div>
               <div class="card-body">
                 <form>
@@ -18,30 +18,36 @@
                     </div>
                     <div class="col-md-3 px-md-1">
                       <div class="form-group">
-                        <label>Kullanıcı Adı</label>
-                        <input type="text" class="form-control" placeholder="Kullanıcı Adı" v-model="kurye.username" >
+                        <label>Ürün Adı</label>
+                        <input type="text" class="form-control" placeholder="Ürün Adı" v-model="product.name" >
                       </div>
                     </div>
                     <div class="col-md-4 pl-md-1">
                       <div class="form-group">
-                        <label for="exampleInputEmail1">Şifre </label>
-                        <input type="password" class="form-control" placeholder="Şifre" v-model="kurye.password">
+                        <label for="exampleInputEmail1">Fiyat </label>
+                        <input type="number" class="form-control" placeholder="Fiyat" v-model="product.price">
                       </div>
                     </div>
+                    
                   </div>
                   <div class="row">
-                    <div class="col-md-6 pr-md-1">
+                    <div class="col-md-3 pr-md-1">
                       <div class="form-group">
-                        <label>Ad </label>
-                        <input type="text" class="form-control" placeholder="Ad"  v-model="kurye.firstname" >
+                        <label>Kategori </label>
+                       <select class="form-control"  v-model="product.categoryId">
+                         <option disabled value="">Seçiniz </option>
+                         <option  :value="category.id"   v-for="category in categoryList"  :key="category.id">{{category.id}} : {{category.name}}</option>
+                       </select>
+                      </div>
+                      
+                    </div>
+                    <div class="col-md-6 pl-md-2">
+                      <div class="form-group">
+                        <label>Açıklama </label>
+                        <textarea type="text" class="form-control" placeholder="Açıklama" v-model="product.card_text" > </textarea>
                       </div>
                     </div>
-                    <div class="col-md-6 pl-md-1">
-                      <div class="form-group">
-                        <label>Soyad </label>
-                        <input type="text" class="form-control" placeholder="Soyad"  v-model="kurye.lastname">
-                      </div>
-                    </div>
+                   
                   </div>
                  
                  
@@ -49,8 +55,8 @@
                 </form>
               </div>
               <div class="card-footer">
-                <button type="submit" @click="sendDetail" class="btn btn-fill btn-primary">Kaydet</button>
-               
+                <button @click="addProduct" type="submit" class="btn btn-fill btn-primary">Kaydet</button>
+              
               </div>
             </div>
           </div>
@@ -62,38 +68,41 @@
                     <thead class=" text-primary">
                       <tr>
                         <th>
-                          Ad
+                          Ürün Adı
                         </th>
                         <th>
-                          Soyad
+                          Fiyatı
                         </th>
                         <th>
-                          İşe Başlama Tarihi
+                          Kategori
                         </th>
                         <th class="text-center">
-                          Toplam Sipariş
+                          Açıklama
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="kurye in kuryeList" :key="kurye.id">
+                      <tr  v-for="product in productList" :key="product.id">
                         <td>
-                         {{kurye.firstname}}
-                        </td>
-                        <td>
-                         {{kurye.lastname}}
+                        {{product.name}} 
                         
+                
                         </td>
                         <td>
-                         {{kurye.date}}
+                        {{product.price}} ₺
+
+                        </td>
+                        <td>
+                        {{product.categoryName}}
                         
                         </td>
                         <td class="text-center">
-                         {{kurye.siparis}}
+                        {{product.cardText}}
+                       
                           
                         </td>
                         <td class="text-center">
-                         <button @click="deleteKurye(kurye.id)" class="btn btn-fill btn-info">Sil</button>
+                         <button  @click="deleteProduct(product.id)" class="btn btn-fill btn-info">Sil</button>
                         </td>
                       </tr>
                    
@@ -115,12 +124,18 @@ import axios from 'axios'
 export default {
   data(){
     return{
-        kuryeList:[],
-      kurye:{
-        username:'',
-        password:'',
-        firstname:'',
-        lastname:'',
+          categoryList:[],
+          productList:[],
+          kuryeList:[],
+        
+      product:{
+        name:'',
+        price:'',
+        card_text:'',
+        numberProduct:0,
+        categoryId:0,
+        store:'',
+        
 
 
       }
@@ -130,14 +145,22 @@ export default {
   },
   methods:{
 
-    sendDetail(){
-      const url = 'http://localhost:81/admin/api/newKurye'
-        if(this.kurye.username != '' && this.kurye.password != '' && this.kurye.firstname != '' && this.kurye.lastname != '' ){
-                
-            axios.post(url,this.kurye)
-            .then( (response) =>{
-             if(response.data.status == "ok"){
-                 swal("Kurye Başarıyla Eklendi!", "", "success", {
+    deleteProduct(id){
+       const url = 'http://localhost:81/admin/api/product/del/'+id;
+
+       axios.get(url)
+    },
+
+    addProduct(){
+      const url = 'http://localhost:81/admin/api/newProduct'
+      if(this.product.name != '' && this.product.price !='' && this.product.categoryId !=null ){
+        
+        axios.post(url,this.product)
+      .then((res) =>{
+        console.log(res);
+        
+           if(res.data.status == "ok"){
+                 swal("Ürün Başarıyla Eklendi!", "", "success", {
                 button: "Devam Et!",
                 timer:1500
       }).then(() =>{
@@ -146,27 +169,29 @@ export default {
               
                 
              }
-           
-            })
+          
+      })
 
-        }else{
-      swal("Kurye Eklenemedi!", "", "warning", {
+      }
+      else{
+
+      swal("Ürün Eklenemedi!", "", "warning", {
         button: "Devam Et!",
         timer:1500
       });
-
-        }
+      }
+     
       
-
     },
-    deleteKurye(id){
-      const url = 'http://localhost:81/admin/api/kurye/del/'+id;
-
+    deleteProduct(id){
+      const url = 'http://localhost:81/admin/api/product/del/'+id;
+      
       axios.get(url)
-      .then((res)=>{
+      .then((res) => {
+          console.log(res);
 
-         if(res.data.status == "ok"){
-                 swal("Kurye Başarıyla Silindi!", "", "success", {
+           if(res.data.status == "ok"){
+                 swal("Ürün Başarıyla Silindi!", "", "success", {
                 button: "Devam Et!",
                 timer:1500
       }).then(() =>{
@@ -175,31 +200,49 @@ export default {
               
                 
              }else{
-                swal("Kurye Silinemedi!", "", "warning", {
+                swal("Ürün Silinemedi!", "", "warning", {
         button: "Devam Et!",
         timer:1500
       });
 
              }
-        
+          
       })
-      
 
     }
+  
 
    
 
   },
   created(){
-    const url = 'http://localhost:81/admin/api/allKurye'
+    const url = 'http://localhost:81/admin/api/allCateogry'
     axios.get(url)
     .then((response) =>{
     
-      this.kuryeList = response.data;
+    
+        this.categoryList = response.data;
+       
+  
+
+    });
+
+    const url2 = 'http://localhost:81/admin/api/allproduct'
+    axios.get(url2)
+    .then((res) =>{
+    
+          
+        this.productList = res.data;
+          
+          
+        
       
       
 
-    })
+    });
+
+
+
 
   }
 

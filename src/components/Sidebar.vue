@@ -23,25 +23,38 @@
              </a>
             
           </li>
+          <!--
           <li>
             <a href="./icons.html">
               <i class="tim-icons icon-atom"></i>
               <p>Yetkilendirme</p>
             </a>
           </li>
+-->
+           <li>
+             <router-link tag="a" to="/adduser">
+              <i class="tim-icons icon-atom"></i>
+              <p>Kullanıcı Ayarları</p>
+            </router-link>
+          </li>
          
-          <li>
-            <a href="./notifications.html">
-              <i class="tim-icons icon-bell-55"></i>
-              <p>Kurye Ekle</p>
-            </a>
-          </li>
-          <li>
-            <a href="./user.html">
-              <i class="tim-icons icon-single-02"></i>
-              <p>Siparişer </p>
-            </a>
-          </li>
+           <li>
+            
+              <router-link tag='a' to='/kurye' >
+                <i class="tim-icons icon-bell-55"></i>
+               <p>Kurye Ekleme </p>
+              </router-link>
+            
+          </li> 
+           <li>
+            
+              <router-link tag='a' to='/addproduct' >
+                <i class="tim-icons icon-bell-55"></i>
+               <p>Ürün Ekleme </p>
+              </router-link>
+            
+          </li> 
+           
           <li>
             
               <router-link tag='a' to='/products' >
@@ -51,10 +64,18 @@
             
           </li>
           <li>
-            <a href="./typography.html">
+            
+              <router-link tag='a' to='/categorys' >
+                <i class="tim-icons icon-align-center"></i>
+               <p>Kategoriler </p>
+              </router-link>
+            
+          </li>
+          <li>
+            <router-link tag='a' to='/rezervasyon'>
               <i class="tim-icons icon-align-center"></i>
               <p>Rezervasyon</p>
-            </a>
+           </router-link>
           </li>
          
          

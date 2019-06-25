@@ -5,7 +5,7 @@
           <div class="col-md-6">
             <div class="card">
               <div class="card-header">
-                <h5 class="title">Kurye Ekle</h5>
+                <h5 class="title">Kullanıcı Ekle</h5>
               </div>
               <div class="card-body">
                 <form>
@@ -18,14 +18,14 @@
                     </div>
                     <div class="col-md-3 px-md-1">
                       <div class="form-group">
-                        <label>Kullanıcı Adı</label>
-                        <input type="text" class="form-control" placeholder="Kullanıcı Adı" v-model="kurye.username" >
+                        <label>Mail</label>
+                        <input type="email" class="form-control"  placeholder="Email "  v-model="kullanici.email" >
                       </div>
                     </div>
                     <div class="col-md-4 pl-md-1">
                       <div class="form-group">
                         <label for="exampleInputEmail1">Şifre </label>
-                        <input type="password" class="form-control" placeholder="Şifre" v-model="kurye.password">
+                        <input type="password" class="form-control" placeholder="Şifre" v-model="kullanici.password">
                       </div>
                     </div>
                   </div>
@@ -33,13 +33,17 @@
                     <div class="col-md-6 pr-md-1">
                       <div class="form-group">
                         <label>Ad </label>
-                        <input type="text" class="form-control" placeholder="Ad"  v-model="kurye.firstname" >
+                        <input type="text" class="form-control" placeholder="Ad"  v-model="kullanici.name" >
                       </div>
                     </div>
                     <div class="col-md-6 pl-md-1">
                       <div class="form-group">
-                        <label>Soyad </label>
-                        <input type="text" class="form-control" placeholder="Soyad"  v-model="kurye.lastname">
+                        <label>Yetki </label>
+                       <select class="form-control" v-model="kullanici.authority">
+                         <option disabled value="">Seçiniz </option>
+                         <option   :value="yetki.number" v-for="yetki in yetkiList" :key="yetki.number" >{{yetki.derece}} - {{yetki.number}}</option>
+                       </select>
+                      
                       </div>
                     </div>
                   </div>
@@ -49,10 +53,11 @@
                 </form>
               </div>
               <div class="card-footer">
-                <button type="submit" @click="sendDetail" class="btn btn-fill btn-primary">Kaydet</button>
+                <button type="submit" @click="sendUserDetail" class="btn btn-fill btn-primary">Ekle</button>
                
               </div>
             </div>
+          
           </div>
           <div class="col-md-4">
             <div class="card card-user">
@@ -62,38 +67,41 @@
                     <thead class=" text-primary">
                       <tr>
                         <th>
-                          Ad
+                          İd
                         </th>
                         <th>
-                          Soyad
+                          Email
                         </th>
                         <th>
-                          İşe Başlama Tarihi
+                         Ad-Soyad
                         </th>
                         <th class="text-center">
-                          Toplam Sipariş
+                         Yetki Derecesi
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="kurye in kuryeList" :key="kurye.id">
+                      <tr v-for="user in userList" :key="user.id">
                         <td>
-                         {{kurye.firstname}}
+                        {{user.id}}
                         </td>
                         <td>
-                         {{kurye.lastname}}
+                        {{user.email}}
+                        
                         
                         </td>
                         <td>
-                         {{kurye.date}}
+                        {{user.name}}
+                       
                         
                         </td>
                         <td class="text-center">
-                         {{kurye.siparis}}
+                        {{user.authority}}
+                        
                           
                         </td>
                         <td class="text-center">
-                         <button @click="deleteKurye(kurye.id)" class="btn btn-fill btn-info">Sil</button>
+                         <button @click="deleteKullanici(user.id)" class="btn btn-fill btn-info">Sil</button>
                         </td>
                       </tr>
                    
@@ -115,12 +123,13 @@ import axios from 'axios'
 export default {
   data(){
     return{
-        kuryeList:[],
-      kurye:{
-        username:'',
+        userList:[],
+        yetkiList:[{"derece":"0 Yetki", "number":0},{"derece":"Okuma", "number":1},{"derece":"Okuma-Yazma", "number":2}],
+        kullanici:{
+        email:'',
         password:'',
-        firstname:'',
-        lastname:'',
+        name:'',
+        authority:'',
 
 
       }
@@ -130,14 +139,16 @@ export default {
   },
   methods:{
 
-    sendDetail(){
-      const url = 'http://localhost:81/admin/api/newKurye'
-        if(this.kurye.username != '' && this.kurye.password != '' && this.kurye.firstname != '' && this.kurye.lastname != '' ){
+    sendUserDetail(){
+      const url = 'http://localhost:81/admin/api/newCalisan'
+        if(this.kullanici.mail != '' && this.kullanici.password != '' && this.kullanici.name != '' && this.kullanici.authority != '' ){
                 
-            axios.post(url,this.kurye)
+            axios.post(url,this.kullanici)
             .then( (response) =>{
+              console.log(response.data);
+              
              if(response.data.status == "ok"){
-                 swal("Kurye Başarıyla Eklendi!", "", "success", {
+                 swal("Kullanıcı Başarıyla Eklendi!", "", "success", {
                 button: "Devam Et!",
                 timer:1500
       }).then(() =>{
@@ -150,7 +161,7 @@ export default {
             })
 
         }else{
-      swal("Kurye Eklenemedi!", "", "warning", {
+      swal("Kullanıcı Eklenemedi!", "", "warning", {
         button: "Devam Et!",
         timer:1500
       });
@@ -159,14 +170,14 @@ export default {
       
 
     },
-    deleteKurye(id){
-      const url = 'http://localhost:81/admin/api/kurye/del/'+id;
+    deleteKullanici(id){
+      const url = 'http://localhost:81/admin/api/delCalisan/'+id;
 
       axios.get(url)
       .then((res)=>{
 
          if(res.data.status == "ok"){
-                 swal("Kurye Başarıyla Silindi!", "", "success", {
+                 swal("Kullanıcı Başarıyla Silindi!", "", "success", {
                 button: "Devam Et!",
                 timer:1500
       }).then(() =>{
@@ -175,7 +186,7 @@ export default {
               
                 
              }else{
-                swal("Kurye Silinemedi!", "", "warning", {
+                swal("Kullanıcı Silinemedi!", "", "warning", {
         button: "Devam Et!",
         timer:1500
       });
@@ -191,11 +202,13 @@ export default {
 
   },
   created(){
-    const url = 'http://localhost:81/admin/api/allKurye'
+    const url = 'http://localhost:81/admin/api/allWorker'
     axios.get(url)
     .then((response) =>{
     
-      this.kuryeList = response.data;
+     console.log(response.data);
+     
+      this.userList = response.data;
       
       
 

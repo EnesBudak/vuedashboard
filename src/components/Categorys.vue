@@ -8,9 +8,8 @@
   <thead class=" text-primary">
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Yemek Adı</th>
-      <th scope="col">Fiyatı</th>
-      <th scope="col">Kategori</th>
+      <th scope="col">Kategori Adı</th>
+ 
       <th scope="col">İşlem</th>
     </tr>
   </thead>
@@ -18,8 +17,7 @@
     <tr v-for="(item,index) in itemList" :key="item.id">
       <td  >{{index}}</td>
       <td>{{item.name}}</td>
-      <td>{{item.price}} ₺</td>
-      <td>{{item.categoryName}}</td>
+  
       <td> <button class="btn-xs btn-fill btn-danger">Sil</button></td>
      
     </tr>
@@ -43,7 +41,7 @@ export default {
   },
 
   created(){
-    const url = 'http://localhost:81/admin/api/allproduct';
+    const url = 'http://localhost:81/admin/api/allCateogry';
     axios.get(url)
     .then((response) => {
         console.log(response.data);
