@@ -14,10 +14,10 @@
         </div>
         <ul class="nav">
          
-          <li class="active ">
+          <li >
            
               <a href="/dashboard">
-              <i class="tim-icons icon-chart-pie-36"  ></i>
+              <i class="tim-icons icon-chart-bar-32"  ></i>
              
               <p>Dashboard</p>
              </a>
@@ -33,7 +33,7 @@
 -->
            <li>
              <router-link tag="a" to="/adduser">
-              <i class="tim-icons icon-atom"></i>
+              <i class="tim-icons icon-single-02"></i>
               <p>Kullanıcı Ayarları</p>
             </router-link>
           </li>
@@ -41,7 +41,7 @@
            <li>
             
               <router-link tag='a' to='/kurye' >
-                <i class="tim-icons icon-bell-55"></i>
+                <i class="tim-icons icon-simple-add"></i>
                <p>Kurye Ekleme </p>
               </router-link>
             
@@ -49,7 +49,7 @@
            <li>
             
               <router-link tag='a' to='/addproduct' >
-                <i class="tim-icons icon-bell-55"></i>
+                <i class="tim-icons icon-simple-add"></i>
                <p>Ürün Ekleme </p>
               </router-link>
             
@@ -58,7 +58,7 @@
           <li>
             
               <router-link tag='a' to='/products' >
-                <i class="tim-icons icon-puzzle-10"></i>
+                <i class="tim-icons icon-cart"></i>
                <p>Ürünler </p>
               </router-link>
             
@@ -66,7 +66,7 @@
           <li>
             
               <router-link tag='a' to='/categorys' >
-                <i class="tim-icons icon-align-center"></i>
+                <i class="tim-icons icon-bullet-list-67"></i>
                <p>Kategoriler </p>
               </router-link>
             
@@ -75,6 +75,12 @@
             <router-link tag='a' to='/rezervasyon'>
               <i class="tim-icons icon-align-center"></i>
               <p>Rezervasyon</p>
+           </router-link>
+          </li>
+           <li>
+            <router-link tag='a' to='/satistakip'>
+              <i class="tim-icons icon-basket-simple"></i>
+              <p>Satış Takip</p>
            </router-link>
           </li>
          

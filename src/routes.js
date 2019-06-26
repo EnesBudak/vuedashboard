@@ -6,6 +6,7 @@ import Categorys from './components/Categorys.vue'
 import AddProduct from './components/ÜrünEkle.vue'
 import Rezervasyon from './components/Rezervasyon.vue'
 import Kullanici from './components/KullanıcıEkle.vue'
+import SatisTakip from './components/SatisTakip.vue'
 
 export const routes = [
   {
@@ -51,6 +52,12 @@ export const routes = [
     path:'/adduser',
     name:'Kullanici Ekle',
     component:Kullanici
+
+  },
+  {
+    path:'/satistakip',
+    name:'Satis Takip ',
+    component:SatisTakip
 
   },
  
