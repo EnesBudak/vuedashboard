@@ -62,7 +62,7 @@ export default {
 
   },
   created(){
-      const url = 'http://localhost:81/admin/api/orderDetay/year';
+      const url = 'http://192.168.1.47:81/admin/api/orderDetay/year';
        axios.get(url)
       .then((res) =>{
           console.log(res.data);

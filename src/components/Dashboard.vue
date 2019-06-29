@@ -260,14 +260,14 @@
    
     },
    async mounted(){
-     await axios.get('http://localhost:81/admin/api/iptalorder')
+     await axios.get('http://192.168.1.47:81/admin/api/iptalorder')
      .then((response) =>{
         this.iptalSiparisData = response.data.iptalCount;
        
         
         
      });
-     await axios.get('http://localhost:81/admin/api/allKurye')
+     await axios.get('http://192.168.1.47:81/admin/api/allKurye')
      .then((res) =>{
         for( let i = 0 ; i < res.data.length ; i++){
             this.kuryeİsim.push(res.data[i].firstname + ' '+ res.data[i].lastname)
@@ -281,16 +281,18 @@
           console.log(this.kuryeSiparis);
           
      });
-     await  axios.get('http://localhost:81/admin/api/thisdayorder')
+     await  axios.get('http://192.168.1.47:81/admin/api/thisdayorder')
         .then((response) => {
-          console.log(response.data.status)
+        
           this.nakitData = response.data.status[0];
           this.krediData = response.data.status[1];
           this.kapidaData = response.data.status[2];
           this.günlükToplamSatis = response.data.orderAmount;
-          console.log(this.günlükToplamSatis);
+         
 
           var numbers = response.data.status;
+          console.log(numbers);
+          
           function getSum(total,num){
           return total + num ;
 
@@ -450,20 +452,21 @@
 
         }),
         
-        await  axios.get('http://localhost:81/admin/api/thismonthorder')
+        await  axios.get('http://192.168.1.47:81/admin/api/thismonthorder')
         .then((response) => {
-          console.log(response.data.status)
+         
           this.aylikLoaded = false;
 
           this.aylikNakitData = response.data.status[0];
           this.aylikKrediData = response.data.status[1];
           this.aylikKapidaData = response.data.status[2];
           this.aylikToplamSatis = response.data.orderAmount;
+          
             var numbers2 = response.data.status;
-          function getSum(total,num){
-          return total + num ;
+            function getSum(total,num){
+            return total + num ;
 
-         }
+          }
          this.aylikSiparisSayisi= numbers2.reduce(getSum);
            this.chartdataAylik = {
         
@@ -556,7 +559,7 @@
     created() {
 
         
-  const  url3 = 'http://localhost:81/admin/api/alluser'
+  const  url3 = 'http://192.168.1.47:81/admin/api/alluser'
 
     axios.get(url3)
     .then((response) => {

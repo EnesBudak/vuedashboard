@@ -32,8 +32,8 @@
                   <div class="row">
                     <div class="col-md-6 pr-md-1">
                       <div class="form-group">
-                        <label>Ad </label>
-                        <input type="text" class="form-control" placeholder="Ad"  v-model="kullanici.name" >
+                        <label>Ad-Soyad </label>
+                        <input type="text" class="form-control" placeholder="Ad-Soyad"  v-model="kullanici.name" >
                       </div>
                     </div>
                     <div class="col-md-6 pl-md-1">

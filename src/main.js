@@ -4,6 +4,7 @@ import {routes} from './routes'
 import VueRouter from 'vue-router'
 import store from './store/index'
 import { ClientTable} from 'vue-tables-2';
+import './registerServiceWorker'
 
 
 Vue.use(VueRouter)

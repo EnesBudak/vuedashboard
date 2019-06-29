@@ -16,11 +16,11 @@
          
           <li >
            
-              <a href="/dashboard">
+             <router-link tag="a" to="/dashboard">
               <i class="tim-icons icon-chart-bar-32"  ></i>
              
               <p>Dashboard</p>
-             </a>
+           </router-link>
             
           </li>
           <!--
